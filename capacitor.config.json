@@ -1,0 +1,14 @@
+{
+  "appId": "com.blackgram.messenger",
+  "appName": "Blackgram",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https",
+    "allowNavigation": [
+      "*.googleapis.com",
+      "*.firebaseapp.com",
+      "*.firebaseio.com",
+      "*.gstatic.com"
+    ]
+  }
+}
