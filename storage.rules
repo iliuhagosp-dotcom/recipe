@@ -1,0 +1,15 @@
+rules_version = '2';
+// Blackgram 2.4 — Storage Rules (ЧЕРНОВИК, не проверен на эмуляторе). Файлы чатов: только участникам, до 10 МБ.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /chats/{chatId}/{uid}/{file} {
+      function member() {
+        return request.auth != null
+          && request.auth.uid in firestore.get(/databases/(default)/documents/chats/$(chatId)).data.participants;
+      }
+      allow read: if member();
+      allow create: if member() && request.auth.uid == uid && request.resource.size < 10 * 1024 * 1024;
+      allow update, delete: if false;
+    }
+  }
+}

@@ -1,0 +1,89 @@
+rules_version = '2';
+// Blackgram 2.2 — Firestore Security Rules (ЧЕРНОВИК, не проверен на эмуляторе).
+// Перед публикацией сохрани текущие правила из консоли Firebase и проверь новые в Rules Playground.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function isOwner() {
+      return signedIn() && request.auth.token.email != null
+        && request.auth.token.email.lower() == 'iliuhagosp@gmail.com';
+    }
+    function myProfile() { return get(/databases/$(database)/documents/users/$(request.auth.uid)).data; }
+    function isAdminWith(perm) {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && myProfile().get('role', 'user') == 'admin'
+        && perm in myProfile().get('permissions', []);
+    }
+
+    match /users/{uid} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.auth.uid == uid
+        && request.resource.data.email.lower() == request.auth.token.email.lower()
+        && request.resource.data.get('blocked', false) == false
+        && (isOwner() || (request.resource.data.get('role', 'user') == 'user'
+            && !('verified' in request.resource.data)
+            && !('permissions' in request.resource.data)));
+      allow update: if isOwner()
+        || (signedIn() && request.auth.uid == uid
+            && !request.resource.data.diff(resource.data).affectedKeys()
+                 .hasAny(['role', 'permissions', 'verified', 'blocked', 'email']))
+        || (isAdminWith('blockUsers') && uid != request.auth.uid
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['blocked']))
+        || (isAdminWith('verifyUsers')
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['verified']));
+      allow delete: if false;
+    }
+
+    match /chats/{chatId} {
+      // get разрешён и для ещё не существующего документа: приложение проверяет наличие чата перед созданием
+      allow get: if signedIn() && (resource == null || request.auth.uid in resource.data.participants);
+      allow list: if signedIn() && request.auth.uid in resource.data.participants;
+      allow create: if signedIn() && request.auth.uid in request.resource.data.participants
+        && request.resource.data.createdBy == request.auth.uid;
+      allow update: if signedIn() && request.auth.uid in resource.data.participants
+        && (resource.data.createdBy == request.auth.uid
+            || request.resource.data.diff(resource.data).affectedKeys()
+                 .hasOnly(['lastText', 'lastSenderId', 'lastAt']));
+      allow delete: if false;
+
+      match /messages/{msgId} {
+        function chatData() { return get(/databases/$(database)/documents/chats/$(chatId)).data; }
+        function isMember() { return signedIn() && request.auth.uid in chatData().participants; }
+        function changed() { return request.resource.data.diff(resource.data).affectedKeys(); }
+
+        allow read: if isMember();
+        allow create: if isMember()
+          && request.resource.data.senderId == request.auth.uid
+          && request.resource.data.text is string
+          && request.resource.data.text.size() <= 4000;
+        allow update: if isMember() && (
+          // автор правит текст своего сообщения
+          (resource.data.senderId == request.auth.uid && changed().hasOnly(['text', 'editedAt']))
+          // любой участник меняет только СВОЮ реакцию
+          || (changed().hasOnly(['reacts'])
+              && request.resource.data.get('reacts', {}).diff(resource.data.get('reacts', {}))
+                   .affectedKeys().hasOnly([request.auth.uid])));
+        allow delete: if isMember()
+          && (resource.data.senderId == request.auth.uid || chatData().createdBy == request.auth.uid);
+      }
+    }
+
+    match /calls/{callId} {
+      function isParty() { return resource.data.from == request.auth.uid || resource.data.to == request.auth.uid; }
+      allow create: if signedIn() && request.resource.data.from == request.auth.uid;
+      allow read, update: if signedIn() && isParty();
+
+      match /{kind}/{candId} {
+        function callPath() { return /databases/$(database)/documents/calls/$(callId); }
+        // id звонка имеет вид call_<время>_<uid звонящего>; кандидаты звонящего пишутся до создания документа звонка
+        function isCaller() { return callId.matches('call_[0-9]+_' + request.auth.uid); }
+        allow create: if signedIn() && (isCaller()
+          || (exists(callPath()) && get(callPath()).data.to == request.auth.uid));
+        allow read: if signedIn() && exists(callPath())
+          && (get(callPath()).data.from == request.auth.uid || get(callPath()).data.to == request.auth.uid);
+      }
+    }
+  }
+}

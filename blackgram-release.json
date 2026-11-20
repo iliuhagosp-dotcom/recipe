@@ -1,12 +1,13 @@
 {
   "app": "Blackgram",
-  "version": "1.4.0",
+  "version": "2.4.1",
   "firebaseProjectId": "blackgram-35ecf",
   "entrypoints": {
     "web": "index.html",
     "capacitor": "www/index.html",
     "expressStatic": "public/index.html"
   },
-  "serviceWorkerCache": "blackgram-shell-v3",
-  "notes": "Synchronized existing implementation; does not add unimplemented cloud media, push notifications, or group calls."
+  "serviceWorkerCache": "blackgram-shell-v24",
+  "firestoreRules": "firestore.rules",
+  "notes": "Stage 1: chat list, replies, edit/delete, per-user reactions, mic/camera permissions in CI. Not implemented yet: file/photo upload, push notifications, message search."
 }
