@@ -1,13 +1,13 @@
 {
   "app": "Blackgram",
-  "version": "2.6.0",
+  "version": "4.0.2",
   "firebaseProjectId": "blackgram-35ecf",
   "entrypoints": {
     "web": "index.html",
     "capacitor": "www/index.html",
     "expressStatic": "public/index.html"
   },
-  "serviceWorkerCache": "blackgram-shell-v26",
+  "serviceWorkerCache": "blackgram-shell-v402",
   "firestoreRules": "firestore.rules",
-  "notes": "Stage 1: chat list, replies, edit/delete, per-user reactions, mic/camera permissions in CI. Not implemented yet: file/photo upload, push notifications, message search."
+  "notes": "4.0.2 Mega update: очередь жалоб с отправкой из личного чата и обработкой модераторами, статус жалобы и аудит; исправлены тексты системных объявлений и обслуживания; сохранён существующий интерфейс. Blackgram AI отсутствует."
 }

@@ -30,7 +30,7 @@ service cloud.firestore {
             && !request.resource.data.diff(resource.data).affectedKeys()
                  .hasAny(['role', 'permissions', 'verified', 'blocked', 'email']))
         || (isAdminWith('blockUsers') && uid != request.auth.uid
-            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['blocked']))
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['blocked', 'blockReason']))
         || (isAdminWith('verifyUsers')
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['verified']));
       allow delete: if false;
@@ -84,6 +84,54 @@ service cloud.firestore {
         allow read: if signedIn() && exists(callPath())
           && (get(callPath()).data.from == request.auth.uid || get(callPath()).data.to == request.auth.uid);
       }
+    }
+
+    // Журнал действий: записи неизменяемые; чтение доступно владельцу и админам с viewLogs.
+    match /adminLog/{id} {
+      allow create: if signedIn() && request.resource.data.by == request.auth.uid
+        && (isOwner() || isAdminWith('blockUsers') || isAdminWith('verifyUsers')
+            || isAdminWith('manageSettings') || isAdminWith('manageReports') || isAdminWith('manageGroups'));
+      allow read: if isOwner() || isAdminWith('viewLogs');
+      allow update, delete: if false;
+    }
+
+    // Системные настройки доступны для чтения авторизованным клиентам; менять их может владелец или админ с manageSettings.
+    match /systemConfig/{configId} {
+      allow read: if signedIn();
+      allow create, update: if isOwner() || isAdminWith('manageSettings');
+      allow delete: if isOwner();
+    }
+
+    // Объявления публикуются только владельцем или админом с manageSettings и не редактируются задним числом.
+    match /announcements/{announcementId} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.by == request.auth.uid
+        && (isOwner() || isAdminWith('manageSettings'))
+        && request.resource.data.message is string
+        && request.resource.data.message.size() >= 3
+        && request.resource.data.message.size() <= 500;
+      allow update, delete: if isOwner();
+    }
+
+
+    // Пользовательские жалобы: отправитель создаёт только свою жалобу;
+    // читать и менять статус могут владелец и модераторы с manageReports.
+    match /reports/{reportId} {
+      allow create: if signedIn()
+        && request.resource.data.by == request.auth.uid
+        && request.resource.data.targetId is string
+        && request.resource.data.targetId != request.auth.uid
+        && request.resource.data.category is string
+        && request.resource.data.details is string
+        && request.resource.data.details.size() >= 5
+        && request.resource.data.details.size() <= 1000
+        && request.resource.data.status == 'new';
+      allow read: if isOwner() || isAdminWith('manageReports');
+      allow update: if (isOwner() || isAdminWith('manageReports'))
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['status','reviewedBy','reviewedAt'])
+        && request.resource.data.status in ['new','reviewed','resolved'];
+      allow delete: if isOwner();
     }
   }
 }
