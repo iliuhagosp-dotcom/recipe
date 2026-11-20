@@ -1,0 +1,62 @@
+name: Build Blackgram iOS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+    paths:
+      - "index.html"
+      - "www/**"
+      - "public/**"
+      - "icons/**"
+      - "package.json"
+      - "package-lock.json"
+      - "capacitor.config.json"
+      - ".github/workflows/build-ios.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+    steps:
+      - name: Get source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate iOS project
+        run: npx cap add ios
+
+      - name: Sync web app and assets
+        run: npx cap sync ios
+
+      - name: Build unsigned iOS app
+        run: |
+          xcodebuild \
+            -project ios/App/App.xcodeproj \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath ios/DerivedData \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Package iOS app
+        run: |
+          cd ios/DerivedData/Build/Products/Release-iphoneos
+          /usr/bin/zip -r "$GITHUB_WORKSPACE/Blackgram-iOS-unsigned.zip" App.app
+
+      - name: Upload iOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Blackgram-iOS-unsigned
+          path: Blackgram-iOS-unsigned.zip
+          if-no-files-found: error
