@@ -1,0 +1,9 @@
+BLACKGRAM 2.1 — ПОЛНАЯ СБОРКА
+
+- Обновлена иконка Blackgram: градиент фиолетовый/синий/голубой.
+- Обновлены иконки Android/PWA 192x192 и 512x512.
+- Добавлена исходная иконка 1024x1024.
+- Добавлена поддержка платформы Capacitor iOS и workflow GitHub Actions для macOS.
+- Android workflow сохранён.
+
+iOS workflow собирает неподписанный .app и загружает ZIP в Artifacts GitHub Actions. Для установки на iPhone и TestFlight нужна подпись Apple.

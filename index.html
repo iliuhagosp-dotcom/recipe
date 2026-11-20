@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b1220"><link rel="manifest" href="./manifest.webmanifest">
-<title>Blackgram</title>
+<title>Blackgram 2.0</title>
 <style>
 :root{color-scheme:dark;--bg:#0b1220;--panel:#121d2e;--panel2:#1a2940;--line:#26364d;--text:#f3f6fb;--muted:#9aabc1;--accent:#4d8dff;--danger:#ff6577;--green:#45c69a}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}button,input{font:inherit}button{border:0;border-radius:12px;padding:11px 14px;background:var(--accent);color:white;font-weight:650;cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}.secondary{background:var(--panel2);border:1px solid var(--line)}.danger{background:#6d2938}.muted{color:var(--muted)}.small{font-size:12px}input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#0d1727;color:var(--text);outline:none}input:focus{border-color:var(--accent)}#auth{max-width:430px;margin:7vh auto;padding:22px}.brand{font-size:32px;font-weight:850;letter-spacing:-1.5px;margin-bottom:6px}.brand span{color:var(--accent)}.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:20px;margin-top:22px}.stack{display:grid;gap:12px}.switch{background:transparent;color:#8fb6ff;padding:6px}#error{color:var(--danger);font-size:13px;min-height:18px}#app{display:none;max-width:1200px;margin:auto;min-height:100vh;grid-template-columns:300px 1fr;border-left:1px solid var(--line);border-right:1px solid var(--line)}.sidebar{background:var(--panel);border-right:1px solid var(--line);min-height:100vh;display:flex;flex-direction:column;min-width:0}.top{padding:16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}.top .brand{font-size:24px;margin:0}.me{padding:12px 16px;color:var(--muted);font-size:12px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}.tools{display:flex;gap:7px;padding:10px}.tools button{flex:1;padding:9px 6px;font-size:12px}.search{padding:0 10px 10px;display:flex;gap:6px}.search input{min-width:0;flex:1}.search button{padding:9px 10px;font-size:12px;white-space:nowrap}#people{overflow:auto;flex:1}.person{width:100%;text-align:left;background:transparent;border-radius:0;border-bottom:1px solid var(--line);padding:13px 15px;color:var(--text);display:block}.person.active{background:var(--panel2)}.person small{display:block;color:var(--muted);font-weight:400;margin-top:3px}.chat{display:flex;flex-direction:column;min-height:100vh;min-width:0}.chathead{padding:16px;border-bottom:1px solid var(--line);font-weight:700;display:flex;align-items:center;justify-content:space-between;gap:8px}.chathead small{display:block;font-size:11px;color:var(--muted);font-weight:400}.messages{flex:1;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:9px}.bubble{max-width:78%;padding:10px 13px;border-radius:16px;background:var(--panel2);align-self:flex-start;overflow-wrap:anywhere;white-space:pre-wrap}.bubble.mine{align-self:flex-end;background:#2457a6}.bubble time{display:block;font-size:10px;color:#c5d5eb;margin-top:4px;text-align:right}.send{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);padding-bottom:max(12px,env(safe-area-inset-bottom))}.send input{flex:1;min-width:0}.empty{margin:auto;text-align:center;color:var(--muted);padding:24px}.hidden{display:none!important}.modal{position:fixed;inset:0;background:#0009;display:grid;place-items:center;padding:16px;z-index:5}.modalbox{width:min(500px,100%);max-height:85vh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px}.modalbox h3{margin-top:0}.modalrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}.modalrow span{overflow-wrap:anywhere}.modalactions{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}.adminuser{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}.adminuser small{display:block;color:var(--muted);overflow-wrap:anywhere}.hint{font-size:12px;color:var(--muted);line-height:1.5}@media(max-width:700px){#app{grid-template-columns:118px 1fr}.top{padding:10px 7px;display:block}.top .brand{font-size:19px}.top button{padding:8px 6px;font-size:11px;margin-top:7px;width:100%}.me{padding:9px 7px;font-size:10px}.tools{padding:6px;display:grid;grid-template-columns:1fr}.tools button{font-size:10px;padding:7px 3px}.search{padding:0 6px 7px}.person{padding:12px 7px;font-size:12px;overflow-wrap:anywhere}.person small{font-size:9px}.chathead{padding:13px 9px;font-size:14px}.messages{padding:12px 8px}.send{padding:9px 7px}.bubble{max-width:92%}.chathead button{padding:8px;font-size:11px}}
 
@@ -70,6 +70,89 @@ button{transition:transform .16s ease,background .16s ease,border-color .16s eas
 @media(min-width:701px){#app{min-height:100vh}.sidebar{min-height:100vh}.chat{min-height:100vh}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 
+
+/* BLACKGRAM 2.0 — Cherrygram-inspired redesign; original Blackgram identity */
+:root{
+ --bg:#0d111b;--panel:#151c2a;--panel2:#202a3b;--line:rgba(166,184,215,.12);
+ --text:#f4f6ff;--muted:#929db4;--accent:#8b7cff;--danger:#ff647c;--green:#4ed6aa;
+ --shadow:0 22px 65px rgba(0,0,0,.34)
+}
+html{background:var(--bg);scroll-behavior:smooth}
+body{background:radial-gradient(ellipse at 8% -10%,rgba(116,91,255,.17),transparent 38%),radial-gradient(ellipse at 100% 5%,rgba(47,155,222,.10),transparent 30%),var(--bg);letter-spacing:.005em}
+button{border-radius:14px;background:linear-gradient(135deg,#8b7cff,#5d7ff2);box-shadow:0 6px 18px rgba(107,103,255,.18);transition:transform .16s ease,filter .16s ease,background .16s ease}
+button:hover{filter:brightness(1.09);transform:translateY(-1px)}
+button:active{transform:scale(.97)}
+button:focus-visible,input:focus-visible{outline:2px solid #a99fff;outline-offset:2px}
+.secondary{background:rgba(39,49,70,.78);border:1px solid var(--line);box-shadow:none;color:#e8eaff}
+#app{max-width:1360px;min-height:100dvh;background:rgba(15,21,33,.72);border:1px solid rgba(167,179,218,.10);border-radius:24px;overflow:hidden;box-shadow:var(--shadow);margin:14px auto}
+.sidebar{background:linear-gradient(180deg,rgba(25,31,48,.98),rgba(18,25,39,.98));border-right:1px solid var(--line)}
+.top{padding:20px 18px 16px;background:rgba(255,255,255,.015)}
+.top .brand{font-size:27px;letter-spacing:-1.2px}
+.brand span{background:linear-gradient(100deg,#a69aff,#6ed6ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.me{padding:13px 18px;color:#aeb8ce}
+.tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));padding:12px;gap:8px}
+.tools button{font-size:12px;min-width:0;min-height:42px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search{padding:4px 12px 12px}
+.search input,input{background:#111827;border:1px solid rgba(164,177,215,.13);border-radius:15px}
+.search input{padding:13px 14px}
+.search button{min-width:42px}
+#people{padding:2px 8px 12px}
+.person{display:flex;align-items:center;gap:11px;margin:4px 0;padding:11px 10px;border:1px solid transparent;border-radius:16px;background:transparent;transition:background .16s,border-color .16s}
+.person:hover{background:rgba(137,126,255,.08)}
+.person.active{background:linear-gradient(110deg,rgba(137,124,255,.19),rgba(78,162,221,.08));border-color:rgba(154,143,255,.22)}
+.person .avatar{width:48px;height:48px;flex:0 0 48px;border:2px solid rgba(169,157,255,.28);box-shadow:0 4px 14px rgba(0,0,0,.22)}
+.person small{color:#9da9c1}
+.chat{background:radial-gradient(ellipse at 80% 0%,rgba(92,105,185,.08),transparent 36%),#101725}
+.chathead{padding:16px 22px;background:rgba(23,31,48,.88);border-bottom:1px solid var(--line);backdrop-filter:blur(18px)}
+.chathead #chatTitle{font-size:16px;letter-spacing:.01em}
+.chathead small{color:#9ca9c2;margin-top:3px}
+.messages{padding:22px;gap:11px;background-image:radial-gradient(rgba(168,160,255,.035) 1px,transparent 1px);background-size:22px 22px}
+.bubble{padding:11px 15px;border:1px solid rgba(174,185,224,.09);border-radius:18px 18px 18px 6px;background:#202b40;box-shadow:0 5px 18px rgba(0,0,0,.10);line-height:1.45}
+.bubble.mine{background:linear-gradient(135deg,#6258c8,#4b70c8);border-color:rgba(196,190,255,.16);border-radius:18px 18px 6px 18px}
+.bubble time{color:rgba(240,242,255,.7)}
+.send{padding:13px 16px;background:rgba(20,28,43,.97);border-top:1px solid var(--line)}
+.send input{min-height:48px;padding:12px 16px;background:#1a2436}
+.send button{min-width:48px;border-radius:15px}
+.featuretools{display:flex;gap:8px;flex-wrap:wrap;padding:9px 14px 13px;background:rgba(20,28,43,.97);border-top:0}
+.featuretools button{font-size:12px;padding:9px 13px;border:1px solid var(--line);background:#222d42;box-shadow:none}
+.bottom-nav{background:rgba(20,27,42,.96)!important;border-top:1px solid var(--line)!important;backdrop-filter:blur(18px);padding-bottom:max(9px,env(safe-area-inset-bottom))}
+.bottom-nav button{background:transparent;box-shadow:none;color:#9ca8c2;border-radius:14px}
+.bottom-nav button.active{background:rgba(139,124,255,.16);color:#c9c2ff}
+.modal{background:rgba(4,7,14,.72);backdrop-filter:blur(14px)}
+.modalbox{background:linear-gradient(150deg,#202a40,#151d2d 72%);border:1px solid rgba(177,184,235,.16);border-radius:24px;box-shadow:var(--shadow)}
+#auth{max-width:470px;margin:7dvh auto;padding:22px}
+#auth .brand{font-size:42px}
+#auth .card{background:linear-gradient(145deg,rgba(32,42,64,.96),rgba(20,28,44,.98));border:1px solid rgba(171,161,255,.18);border-radius:26px;padding:26px;box-shadow:var(--shadow)}
+#auth input{min-height:50px;padding:14px}
+#auth button{min-height:48px}
+#error{font-weight:600}
+::-webkit-scrollbar{width:7px;height:7px}
+::-webkit-scrollbar-thumb{background:rgba(153,161,207,.25);border-radius:10px}
+@media(max-width:700px){
+ #app{margin:0;border:0;border-radius:0;min-height:100dvh}
+ .sidebar{background:linear-gradient(180deg,#171e30,#111827)}
+ .top{padding:18px 16px 12px}
+ .top .brand{font-size:27px}
+ .tools{grid-template-columns:repeat(3,minmax(0,1fr));padding:9px 10px;gap:6px}
+ .tools button{font-size:10px;min-height:39px;padding:7px 3px;border-radius:12px}
+ .me{padding:8px 14px;font-size:11px}
+ .search{padding:2px 10px 9px}
+ #people{padding:0 7px 80px}
+ .person{min-height:68px;padding:9px 8px;margin:3px 0}
+ .person .avatar{width:47px;height:47px;flex-basis:47px}
+ .chathead{padding:10px 12px;min-height:62px}
+ .messages{padding:15px 11px 20px}
+ .send{padding:10px 9px max(10px,env(safe-area-inset-bottom))}
+ .send input{min-height:46px}
+ .featuretools{padding:7px 9px 9px;gap:6px}
+ .featuretools button{font-size:11px;padding:8px 11px}
+ .bottom-nav{display:flex;position:sticky;bottom:0;z-index:3;justify-content:space-around}
+ .bottom-nav button{flex:1;min-height:48px}
+ #auth{margin:5dvh auto;padding:18px}
+ #auth .brand{font-size:39px}
+ #auth .card{padding:22px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style></head><body>
 <section id="auth"><div class="brand">Black<span>gram</span></div><div class="muted">Мессенджер для общения</div><div class="card stack"><h2 id="authTitle" style="margin:0">Вход</h2><input id="name" placeholder="Твоё имя" autocomplete="name" class="hidden"><input id="email" type="email" placeholder="Электронная почта" autocomplete="email"><input id="password" type="password" placeholder="Пароль (от 6 символов)" autocomplete="current-password"><button id="authBtn">Войти</button><button class="switch" id="modeBtn">Нет аккаунта? Зарегистрироваться</button><div id="error"></div><div class="hint">Создай аккаунт и попроси друзей зарегистрироваться с другого телефона. Никому не сообщай пароль.</div></div></section>
 <main id="app"><aside class="sidebar"><div class="top"><div class="brand">Black<span>gram</span></div><button id="logout" class="secondary">Выйти</button></div><div class="me" id="me">Загрузка...</div><div class="tools"><button id="newGroup">＋ Группа</button><button id="profileBtn" class="secondary">👤 Профиль</button><button id="themeBtn" class="secondary">🎨 Тема</button><button id="privacyBtn" class="secondary">🔒 Приватность</button><button id="savedBtn" class="secondary">★ Избранное</button><button id="adminBtn" class="secondary hidden">⚙ Админка</button></div><div class="search"><input id="search" placeholder="Поиск людей..."><button id="advancedSearchBtn" class="secondary" type="button" title="Расширенный поиск">⚙</button></div><div id="people"></div><nav class="bottom-nav"><button id="bottomSettings" class="active" type="button">👤<br>Профиль</button><button id="bottomChats" type="button">▤<br>Чаты</button><button id="bottomSearch" type="button">⌕<br>Поиск</button></nav></aside><section class="chat"><div class="chathead"><button id="backToChats" type="button" aria-label="Назад">‹</button><div><span id="chatTitle">Выбери собеседника</span><small id="chatSub">Blackgram · онлайн-общение</small></div><button id="chatInfo" class="secondary hidden">Участники</button></div><div class="messages" id="messages"><div class="empty">Выбери пользователя слева, чтобы начать общение 👋</div></div><form class="send" id="sendForm"><input id="message" placeholder="Написать сообщение..." autocomplete="off" disabled><button id="sendBtn" disabled>➤</button></form><div class="featuretools"><button id="voiceBtn" class="secondary" type="button">🎙 Голос</button><button id="reactBtn" class="secondary" type="button">😊 Реакции</button><button id="callBtn" class="secondary" type="button">📞 Звонок</button><button id="videoBtn" class="secondary" type="button">📹 Видео</button><button id="channelBtn" class="secondary" type="button">📢 Канал</button></div></section></main>
