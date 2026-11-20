@@ -35,6 +35,13 @@ jobs:
       - name: Generate iOS project
         run: npx cap add ios
 
+      - name: Add iOS privacy descriptions (microphone, camera)
+        run: |
+          PLIST=ios/App/App/Info.plist
+          /usr/libexec/PlistBuddy -c "Add :NSMicrophoneUsageDescription string Blackgram использует микрофон для голосовых сообщений и звонков" "$PLIST" || /usr/libexec/PlistBuddy -c "Set :NSMicrophoneUsageDescription Blackgram использует микрофон для голосовых сообщений и звонков" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Add :NSCameraUsageDescription string Blackgram использует камеру для видеозвонков" "$PLIST" || /usr/libexec/PlistBuddy -c "Set :NSCameraUsageDescription Blackgram использует камеру для видеозвонков" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Print :NSMicrophoneUsageDescription" "$PLIST"
+
       - name: Sync web app and assets
         run: npx cap sync ios
 
