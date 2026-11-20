@@ -1,0 +1,12 @@
+{
+  "app": "Blackgram",
+  "version": "1.4.0",
+  "firebaseProjectId": "blackgram-35ecf",
+  "entrypoints": {
+    "web": "index.html",
+    "capacitor": "www/index.html",
+    "expressStatic": "public/index.html"
+  },
+  "serviceWorkerCache": "blackgram-shell-v3",
+  "notes": "Synchronized existing implementation; does not add unimplemented cloud media, push notifications, or group calls."
+}
