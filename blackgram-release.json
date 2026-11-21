@@ -1,13 +1,14 @@
 {
   "app": "Blackgram",
-  "version": "4.0.2",
+  "version": "5.3.0",
   "firebaseProjectId": "blackgram-35ecf",
   "entrypoints": {
     "web": "index.html",
     "capacitor": "www/index.html",
     "expressStatic": "public/index.html"
   },
-  "serviceWorkerCache": "blackgram-shell-v402",
+  "serviceWorkerCache": "blackgram-shell-v520",
   "firestoreRules": "firestore.rules",
-  "notes": "4.0.2 Mega update: очередь жалоб с отправкой из личного чата и обработкой модераторами, статус жалобы и аудит; исправлены тексты системных объявлений и обслуживания; сохранён существующий интерфейс. Blackgram AI отсутствует."
+  "notes": "Creator-only activity and consent-based connection diagnostics",
+  "name": "Blackgram 5.3 Creator Control"
 }

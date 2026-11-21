@@ -133,5 +133,47 @@ service cloud.firestore {
         && request.resource.data.status in ['new','reviewed','resolved'];
       allow delete: if isOwner();
     }
+    // Support tickets: users create and read only their own requests; admins can review and close.
+    match /supportTickets/{ticketId} {
+      allow create: if signedIn()
+        && request.resource.data.by == request.auth.uid
+        && request.resource.data.topic is string
+        && request.resource.data.message is string
+        && request.resource.data.message.size() >= 8
+        && request.resource.data.message.size() <= 2000
+        && request.resource.data.status == 'open';
+      allow read: if signedIn() && (resource.data.by == request.auth.uid || isOwner() || isAdminWith('manageSupport'));
+      allow update: if isOwner() || isAdminWith('manageSupport');
+      allow delete: if isOwner();
+    }
+
+
+    // Creator-only diagnostics. Users may create only their own metadata events
+    // for chats they belong to, and only after opting in. Message bodies are never stored here.
+    match /chatActivity/{eventId} {
+      function activityChat() {
+        return get(/databases/$(database)/documents/chats/$(request.resource.data.chatId)).data;
+      }
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['actorId','chatId','chatTitle','chatKind','participants','action','createdAt'])
+        && request.resource.data.actorId == request.auth.uid
+        && request.resource.data.chatId is string
+        && request.resource.data.action in ['opened','message_sent']
+        && myProfile().get('creatorTelemetryConsent', false) == true
+        && request.auth.uid in activityChat().participants
+        && request.resource.data.participants == activityChat().participants
+        && request.resource.data.chatTitle is string
+        && request.resource.data.chatTitle.size() <= 80
+        && request.resource.data.chatKind == activityChat().kind;
+      allow read: if isOwner();
+      allow update, delete: if false;
+    }
+
+    // IP records are written only by the trusted Cloud Function (Admin SDK).
+    match /connectionLogs/{logId} {
+      allow read: if isOwner();
+      allow create, update, delete: if false;
+    }
+
   }
 }
