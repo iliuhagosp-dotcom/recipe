@@ -1,0 +1,20 @@
+const {onDocumentCreated}=require('firebase-functions/v2/firestore');
+const {initializeApp}=require('firebase-admin/app');
+const {getFirestore}=require('firebase-admin/firestore');
+const {getMessaging}=require('firebase-admin/messaging');
+initializeApp();
+const db=getFirestore();
+exports.sendChatPush=onDocumentCreated({document:'chats/{chatId}/messages/{messageId}',region:'europe-west1',retry:true},async event=>{
+ const msg=event.data?.data();if(!msg||!msg.senderId)return;
+ const chatSnap=await db.doc(`chats/${event.params.chatId}`).get();if(!chatSnap.exists)return;
+ const participants=Array.isArray(chatSnap.data().participants)?chatSnap.data().participants:[];
+ const recipients=participants.filter(uid=>uid&&uid!==msg.senderId);if(!recipients.length)return;
+ const senderSnap=await db.doc(`users/${msg.senderId}`).get();const sender=senderSnap.exists?senderSnap.data():{};
+ const title=String(sender.name||sender.displayName||'Новое сообщение').slice(0,80);
+ const body=String(msg.text||(msg.audioData?'🎙 Голосовое сообщение':msg.imageData?'📷 Фото':msg.fileUrl?'📎 Файл':'Новое сообщение')).slice(0,180);
+ const users=await Promise.all(recipients.map(uid=>db.doc(`users/${uid}`).get()));const targets=[];
+ for(const user of users){if(!user.exists||user.data().pushEnabled===false)continue;for(const token of (Array.isArray(user.data().fcmTokens)?user.data().fcmTokens:[]))targets.push({uid:user.id,token})}
+ const invalid=[];
+ for(let i=0;i<targets.length;i+=500){const batch=targets.slice(i,i+500);const result=await getMessaging().sendEachForMulticast({tokens:batch.map(x=>x.token),notification:{title,body},data:{chatId:event.params.chatId,senderId:msg.senderId},webpush:{fcmOptions:{link:'/'},notification:{icon:'/icons/icon-192.png',tag:event.params.chatId}}});result.responses.forEach((r,j)=>{if(!r.success&&['messaging/registration-token-not-registered','messaging/invalid-registration-token'].includes(r.error?.code))invalid.push(batch[j])})}
+ await Promise.all(invalid.map(async x=>{const ref=db.doc(`users/${x.uid}`);const snap=await ref.get();await ref.update({fcmTokens:(snap.data()?.fcmTokens||[]).filter(t=>t!==x.token)})}));
+});
