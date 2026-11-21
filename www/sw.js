@@ -1,4 +1,4 @@
-const CACHE='blackgram-shell-v402';
+const CACHE='blackgram-shell-v532';
 const SHELL=['./','./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(async cache=>{for(const url of SHELL){try{await cache.add(url)}catch(e){console.warn('Не удалось закэшировать',url,e)}}}).then(()=>self.skipWaiting()));
