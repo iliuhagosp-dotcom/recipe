@@ -175,5 +175,57 @@ service cloud.firestore {
       allow create, update, delete: if false;
     }
 
+
+    // Blackgram 6.0 — private feature data for each account.
+    match /users/{uid}/bg6/{itemId} {
+      allow read, create, update, delete: if signedIn() && request.auth.uid == uid;
+    }
+    // Shared notes, polls and calendar items are visible only to chat participants.
+    match /chats/{chatId}/bg6notes/{itemId} {
+      function member() { return signedIn() && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants; }
+      allow read: if member();
+      allow create: if member() && request.resource.data.by == request.auth.uid
+        && request.resource.data.text is string && request.resource.data.text.size() <= 3000;
+      allow update, delete: if member() && resource.data.by == request.auth.uid;
+    }
+    match /chats/{chatId}/bg6edits/{itemId} {
+      function member() { return signedIn() && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants; }
+      allow read: if member() && resource.data.by == request.auth.uid;
+      allow create: if member() && request.resource.data.by == request.auth.uid
+        && request.resource.data.messageId is string && request.resource.data.text is string
+        && request.resource.data.text.size() <= 4000;
+      allow update, delete: if false;
+    }
+    match /chats/{chatId}/bg6polls/{itemId} {
+      function member() { return signedIn() && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants; }
+      allow read: if member();
+      allow create: if member() && request.resource.data.by == request.auth.uid
+        && request.resource.data.question is string && request.resource.data.options is list
+        && request.resource.data.options.size() >= 2 && request.resource.data.options.size() <= 10;
+      allow update: if member() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['votes'])
+        && request.resource.data.votes.diff(resource.data.votes).affectedKeys().hasOnly([request.auth.uid]);
+      allow delete: if member() && resource.data.by == request.auth.uid;
+    }
+    match /chats/{chatId}/bg6events/{itemId} {
+      function member() { return signedIn() && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants; }
+      allow read: if member();
+      allow create: if member() && request.resource.data.by == request.auth.uid
+        && request.resource.data.title is string && request.resource.data.title.size() <= 120;
+      allow update, delete: if member() && resource.data.by == request.auth.uid;
+    }
+    // Scheduled messages can only be created/read/cancelled by their sender.
+    // Cloud Functions use Admin SDK to deliver and update status.
+    match /scheduledMessages/{id} {
+      allow create: if signedIn() && request.resource.data.senderId == request.auth.uid
+        && request.resource.data.chatId is string && request.resource.data.text is string
+        && request.resource.data.text.size() > 0 && request.resource.data.text.size() <= 4000
+        && request.resource.data.status == 'pending'
+        && request.auth.uid in get(/databases/$(database)/documents/chats/$(request.resource.data.chatId)).data.participants;
+      allow read: if signedIn() && resource.data.senderId == request.auth.uid;
+      allow update, delete: if signedIn() && resource.data.senderId == request.auth.uid
+        && resource.data.status == 'pending'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']);
+    }
+
   }
 }

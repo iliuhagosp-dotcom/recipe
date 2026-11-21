@@ -1,14 +1,14 @@
 {
   "app": "Blackgram",
-  "version": "5.3.0",
+  "version": "6.0.0",
   "firebaseProjectId": "blackgram-35ecf",
   "entrypoints": {
     "web": "index.html",
     "capacitor": "www/index.html",
     "expressStatic": "public/index.html"
   },
-  "serviceWorkerCache": "blackgram-shell-v520",
+  "serviceWorkerCache": "blackgram-shell-v600",
   "firestoreRules": "firestore.rules",
-  "notes": "Creator-only activity and consent-based connection diagnostics",
-  "name": "Blackgram 5.3 Creator Control"
+  "notes": "30-feature Mega Center, scheduled messages, shared notes, polls, calendar, themes, stories, backup and device utilities",
+  "name": "Blackgram 6.0 Mega Update"
 }
