@@ -14,7 +14,7 @@ exports.sendChatPush=onDocumentCreated({document:'chats/{chatId}/messages/{messa
  const title=String(sender.name||sender.displayName||'Новое сообщение').slice(0,80);
  const body=String(msg.text||(msg.audioData?'🎙 Голосовое сообщение':msg.imageData?'📷 Фото':msg.fileUrl?'📎 Файл':'Новое сообщение')).slice(0,180);
  const users=await Promise.all(recipients.map(uid=>db.doc(`users/${uid}`).get()));const targets=[];
- for(const user of users){if(!user.exists||user.data().pushEnabled===false)continue;for(const token of (Array.isArray(user.data().fcmTokens)?user.data().fcmTokens:[]))targets.push({uid:user.id,token})}
+ for(const user of users){if(!user.exists||user.data().pushEnabled===false||(Array.isArray(user.data().mutedChats)&&user.data().mutedChats.includes(event.params.chatId)))continue;for(const token of (Array.isArray(user.data().fcmTokens)?user.data().fcmTokens:[]))targets.push({uid:user.id,token})}
  const invalid=[];
  for(let i=0;i<targets.length;i+=500){const batch=targets.slice(i,i+500);const result=await getMessaging().sendEachForMulticast({tokens:batch.map(x=>x.token),notification:{title,body},data:{chatId:event.params.chatId,senderId:msg.senderId},webpush:{fcmOptions:{link:'/'},notification:{icon:'/icons/icon-192.png',tag:event.params.chatId}}});result.responses.forEach((r,j)=>{if(!r.success&&['messaging/registration-token-not-registered','messaging/invalid-registration-token'].includes(r.error?.code))invalid.push(batch[j])})}
  await Promise.all(invalid.map(async x=>{const ref=db.doc(`users/${x.uid}`);const snap=await ref.get();await ref.update({fcmTokens:(snap.data()?.fcmTokens||[]).filter(t=>t!==x.token)})}));
