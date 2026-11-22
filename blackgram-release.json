@@ -1,14 +1,14 @@
 {
   "app": "Blackgram",
-  "version": "6.0.0",
+  "version": "7.1.0",
   "firebaseProjectId": "blackgram-35ecf",
   "entrypoints": {
     "web": "index.html",
     "capacitor": "www/index.html",
     "expressStatic": "public/index.html"
   },
-  "serviceWorkerCache": "blackgram-shell-v600",
+  "serviceWorkerCache": "blackgram-shell-v710",
   "firestoreRules": "firestore.rules",
-  "notes": "30-feature Mega Center, scheduled messages, shared notes, polls, calendar, themes, stories, backup and device utilities",
-  "name": "Blackgram 6.0 Mega Update"
+  "notes": "7.0 + swipe actions, scroll-down counter, pinned message, swipe-to-reply, date separators, Telegram-style call screen, private contacts (new users no longer appear automatically)",
+  "name": "Blackgram 7.1 Telegram-style UX"
 }

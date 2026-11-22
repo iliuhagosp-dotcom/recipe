@@ -24,15 +24,16 @@ service cloud.firestore {
         && request.resource.data.get('blocked', false) == false
         && (isOwner() || (request.resource.data.get('role', 'user') == 'user'
             && !('verified' in request.resource.data)
+            && !('tags' in request.resource.data)
             && !('permissions' in request.resource.data)));
       allow update: if isOwner()
         || (signedIn() && request.auth.uid == uid
             && !request.resource.data.diff(resource.data).affectedKeys()
-                 .hasAny(['role', 'permissions', 'verified', 'blocked', 'email']))
+                 .hasAny(['role', 'permissions', 'verified', 'tags', 'blocked', 'email']))
         || (isAdminWith('blockUsers') && uid != request.auth.uid
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['blocked', 'blockReason']))
         || (isAdminWith('verifyUsers')
-            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['verified']));
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['verified', 'tags']));
       allow delete: if false;
     }
 
@@ -45,7 +46,7 @@ service cloud.firestore {
       allow update: if signedIn() && request.auth.uid in resource.data.participants
         && (resource.data.createdBy == request.auth.uid
             || request.resource.data.diff(resource.data).affectedKeys()
-                 .hasOnly(['lastText', 'lastSenderId', 'lastAt']));
+                 .hasOnly(['lastText', 'lastSenderId', 'lastAt', 'pinnedMsg']));
       allow delete: if false;
 
       match /messages/{msgId} {

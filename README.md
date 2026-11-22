@@ -1,4 +1,9 @@
-# Blackgram 6.0 — Mega Update
+# Blackgram 7.0 — Telegram-style UI (поверх 6.0 Mega Update)
+
+См. CHANGELOG-7.0-RU.md.
+
+---
+
 
 Основной проект — Firebase Web/PWA и Capacitor Android/iOS wrapper. Сборка 6.0.0 основана на Blackgram 5.3.2 и сохраняет существующий интерфейс и функции.
 
