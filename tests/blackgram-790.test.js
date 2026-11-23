@@ -1,0 +1,6 @@
+const test=require('node:test');const assert=require('node:assert');const fs=require('fs');
+const idx=fs.readFileSync('index.html','utf8'),fn=fs.readFileSync('functions/index.js','utf8');
+test('25 gifts on server and client, every id has art',()=>{const ids=[...idx.matchAll(/\{id:'(\w+)',name:'[^']+',rar:'(\w+)',price:(\d+)(?:,emo:'[^']+')?/g)];assert.strictEqual(ids.length,25);for(const m of ids){const hasEmo=new RegExp("id:'"+m[1]+"',[^}]*emo:").test(idx);assert.ok(hasEmo||new RegExp('\\b'+m[1]+':`<svg').test(idx),m[1]);const sv=new RegExp('\\b'+m[1]+':\\{p:(\\d+)').exec(fn);assert.ok(sv&&sv[1]===m[3],m[1])}});
+test('profile gifts tab has received and sent modes',()=>{for(const k of['data-gm="in"','data-gm="out"','gf-strip','id="gfGiveBtn"'])assert.ok(idx.includes(k),k)});
+test('admin redesign: hero, owner-only spark shortcut, wallet history',()=>{for(const k of['adm-hero','data-spark=','id="walletLog"','data-wq='])assert.ok(idx.includes(k),k);assert.ok(idx.includes("if(owner)controls+=`<button class=\"secondary\" data-spark")||idx.includes('if(owner)controls+=`<button class="secondary" data-spark'))});
+test('index copies identical',()=>{assert.strictEqual(idx,fs.readFileSync('www/index.html','utf8'));assert.strictEqual(idx,fs.readFileSync('public/index.html','utf8'))});

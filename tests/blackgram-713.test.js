@@ -1,0 +1,7 @@
+const test=require('node:test');const assert=require('node:assert');const fs=require('fs');
+const idx=fs.readFileSync('index.html','utf8');const rules=fs.readFileSync('firestore.rules','utf8');
+test('group and channel management is present',()=>{for(const k of['bg10Add','bg10Leave','data-bg10-add','В канал пишет только его создатель','openChat=function'])assert.ok(idx.includes(k),k)});
+test('rules: only the creator posts to a channel',()=>{assert.match(rules,/get\('kind', ''\) != 'channel' \|\| chatData\(\)\.createdBy == request\.auth\.uid/)});
+test('rules: a member can leave a group or channel but cannot remove others',()=>{assert.match(rules,/in \['group', 'channel'\]/);assert.match(rules,/participants\.removeAll\(\[request\.auth\.uid\]\)/)});
+test('bottom nav has exactly one initially active tab and index copies match',()=>{const html=idx.slice(0,idx.indexOf('<script type="module">'));const n=(html.match(/<button id="bottom(Chats|Search|Settings)"[^>]*class="active"/g)||[]).length;assert.strictEqual(n,1);assert.ok(html.includes('<title>Blackgram 7.1</title>'));assert.strictEqual(idx,fs.readFileSync('www/index.html','utf8'));assert.strictEqual(idx,fs.readFileSync('public/index.html','utf8'))});
+test('firebase.json deploys storage.rules',()=>{const cfg=JSON.parse(fs.readFileSync('firebase.json','utf8'));assert.strictEqual(cfg.storage.rules,'storage.rules');assert.ok(fs.existsSync('storage.rules'))});
