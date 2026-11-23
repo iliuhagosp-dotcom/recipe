@@ -1,14 +1,14 @@
 {
   "app": "Blackgram",
-  "version": "7.1.0",
+  "version": "7.9.0",
   "firebaseProjectId": "blackgram-35ecf",
   "entrypoints": {
     "web": "index.html",
     "capacitor": "www/index.html",
     "expressStatic": "public/index.html"
   },
-  "serviceWorkerCache": "blackgram-shell-v710",
+  "serviceWorkerCache": "blackgram-shell-v790",
   "firestoreRules": "firestore.rules",
-  "notes": "7.0 + swipe actions, scroll-down counter, pinned message, swipe-to-reply, date separators, Telegram-style call screen, private contacts (new users no longer appear automatically)",
-  "name": "Blackgram 7.1 Telegram-style UX"
+  "notes": "7.5 + палитра из референса (изумруд/сапфир/золотая кромка), шрифт Ruslan Display, Discord-рейл и папки Telegram, юзер-панель, режим сообщений Telegram⇄Discord, тултипы, собственный набор иконок вместо эмодзи; 7.7: загрузка фото из галереи с обрезкой и сжатием, баннер, галерея аватарок, просмотр фото, вкладки Медиа/Ссылки, приватность профиля; 7.8: Искры, ежедневный бонус, 10 подарков, вкладка Подарки, накрутка валюты для владельца; 7.9: 25 подарков, фильтр магазина, вкладка Подарки (полученные/отправленные), новый интерфейс админ-панели",
+  "name": "Blackgram 7.9 Gifts+"
 }

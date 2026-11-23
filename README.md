@@ -1,6 +1,6 @@
-# Blackgram 7.0 — Telegram-style UI (поверх 6.0 Mega Update)
+# Blackgram 7.1 — Telegram-style UX (поверх 7.0 и 6.0 Mega Update)
 
-См. CHANGELOG-7.0-RU.md.
+См. CHANGELOG-7.1-RU.md и CHANGELOG-7.0-RU.md.
 
 ---
 
