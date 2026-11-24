@@ -1,6 +1,6 @@
 {
   "name": "blackgram-android",
-  "version": "7.9.0",
+  "version": "7.9.4",
   "private": true,
   "description": "Blackgram 7.1 Telegram-style UI — Firebase messenger PWA and Capacitor wrapper",
   "scripts": {
