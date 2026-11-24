@@ -1,0 +1,2 @@
+const test=require('node:test');const assert=require('node:assert');const fs=require('fs');
+for(const f of['index.html','public/index.html','www/index.html'])test('perf layer present in '+f,()=>{const s=fs.readFileSync(f,'utf8');assert.ok(s.includes('id="bg792perf"'));assert.ok(!s.includes('setInterval(sync,400)'));assert.ok(s.includes('window.__bgSp'));assert.ok(s.includes('window.__bgPT'));assert.strictEqual(s.split('railSoon()').length-1>=3,true)});
